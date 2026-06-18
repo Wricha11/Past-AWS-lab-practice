@@ -1,8 +1,8 @@
 # AWS Cloud Security Monitoring Lab
 
-A self-built AWS lab environment for practicing **cloud-native security monitoring, detection, and RMF-aligned continuous monitoring**. The lab deploys a small multi-instance environment and instruments it with **CloudWatch, CloudTrail, and GuardDuty**, then maps the resulting monitoring and logging coverage back to **NIST SP 800-53** control families.
+A self-built AWS lab environment for practicing **cloud-native security monitoring, detection, and RMF-aligned continuous monitoring**. The lab deploys a small multi-instance environment and instruments it with **CloudWatch**, then I map the resulting monitoring and logging coverage back to **NIST SP 800-53** control families.
 
-> Built and maintained by William Richardson (ISSE / CISSP / AWS Cloud Practitioner) as a hands-on portfolio project bridging cloud engineering and Risk Management Framework (RMF) practice.
+> Built by William Richardson (ISSE / CISSP / AWS Cloud Practitioner) as a hands-on portfolio project bridging cloud engineering and Risk Management Framework (RMF) practice.
 
 ---
 
@@ -46,8 +46,6 @@ DoD and federal systems are increasingly migrating from on-premises to cloud, an
 | **Security Groups** | Host-level network access control (least privilege) |
 | **IAM roles/policies** | Scoped permissions; no long-lived root usage |
 | **CloudWatch** | Centralized logs, metrics, and alarms |
-| **CloudTrail** | Account-wide API/management-event audit logging |
-| **GuardDuty** | Continuous threat detection from VPC flow, DNS, and CloudTrail data |
 
 ---
 
@@ -55,20 +53,14 @@ DoD and federal systems are increasingly migrating from on-premises to cloud, an
 
 The lab focuses on getting **signal** out of the environment, not just standing it up.
 
-- **CloudTrail** — multi-region trail logging management events to a dedicated S3 bucket; log file validation enabled.
 - **CloudWatch Logs** — EC2 system/auth logs shipped via the CloudWatch agent; metric filters created on key patterns (e.g., failed SSH/console logins, root usage, IAM policy changes).
 - **CloudWatch Alarms** — alarms on the metric filters above, notifying an SNS topic.
-- **GuardDuty** — enabled account-wide; findings reviewed and triaged as detection use cases.
 
 ### Example detection use cases
 
 | Use case | Source | Signal |
 |----------|--------|--------|
 | Repeated failed SSH logins | CloudWatch Logs metric filter | Brute-force / credential attack |
-| Root account usage | CloudTrail → metric filter → alarm | Privileged-account misuse |
-| IAM policy / user changes | CloudTrail → metric filter → alarm | Persistence / privilege escalation |
-| Unusual API calls / recon | GuardDuty finding | Reconnaissance, anomalous behavior |
-| Unauthorized port exposure | Security Group review + GuardDuty | Misconfiguration / lateral movement |
 
 > Snippets below are illustrative starting points — adapt names, ARNs, and thresholds to your environment.
 
@@ -130,8 +122,7 @@ A key goal of the lab is showing **how cloud-native services support continuous 
 ## Skills demonstrated
 
 - AWS core services: VPC, EC2, IAM, S3, Security Groups
-- Cloud-native logging/monitoring: CloudTrail, CloudWatch (agent, logs, metric filters, alarms), GuardDuty, SNS
-- Detection engineering and triage in a cloud environment
+- Cloud-native logging/monitoring: CloudWatch (agent, logs, metric filters, alarms)
 - Translating cloud telemetry into NIST 800-53 continuous-monitoring coverage
 - RMF concepts: control inheritance, authorization boundaries, continuous monitoring
 
@@ -140,7 +131,6 @@ A key goal of the lab is showing **how cloud-native services support continuous 
 ## Roadmap
 
 - [ ] Add Infrastructure-as-Code (Terraform or CloudFormation) for repeatable deploys
-- [ ] Forward GuardDuty findings to a SIEM (Security Hub / OpenSearch / Splunk free tier)
 - [ ] Add AWS Config rules for configuration-drift detection (CM family)
 - [ ] Document a sample POA&M workflow from a simulated finding
 - [ ] Add an incident-response runbook for the brute-force use case
